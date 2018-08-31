@@ -20,10 +20,8 @@ var getPlayerProfile = function(id, cb) {
 
   request.get(url, function(error, steamHttpResponse, steamHttpBody) {
     // Print to console to prove we downloaded the achievements.
-    console.log(steamHttpBody);
     cb(steamHttpBody);
 });
-console.log('done call');
 
   //
   // console.log(relationships);

@@ -16,7 +16,22 @@ app.use(express.static(__dirname + '/../react-client/dist'));
 app.get('/user', function (req, res) {
   console.log('calling getPlayerProfile with provided ID');
   var SendDataBack = function (data) {
-    res.send(data);
+    console.log('here is the server data', data);
+    var parsedData = JSON.parse(data).response.players[0];
+    console.log('here is the parsdData, ', parsedData);
+    console.log(data.steamid);
+    console.log(parsedData.steamid);
+
+    var dataToSend = {
+      steamid: parsedData.steamid,
+      personaname: parsedData.personaname,
+      avatar: parsedData.avatar,
+      timecreated: parsedData.timecreated,
+      lastlogoff: parsedData.lastlogoff
+    }
+    console.log('here is the data to send ', dataToSend);
+    
+    res.send(JSON.stringify(dataToSend));
   }
   steam.getPlayerProfile('76561197960435530', SendDataBack);
   // res.send('done');
