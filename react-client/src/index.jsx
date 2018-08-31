@@ -7,17 +7,27 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = { 
-      items: []
+      items: ['Hello','World'],
+      playerInfo: [['test', 123]],
     }
   }
 
   componentDidMount() {
     $.ajax({
-      url: '/items', 
+      url: '/user', 
       success: (data) => {
-        this.setState({
-          items: data
-        })
+        var parseBody = JSON.parse(data);
+        console.log('here is your JSON DATA');
+        console.log(parseBody);
+
+        console.log('here is parseBody.response.players[0]');
+        console.log(parseBody.response.players[0]);
+        // var newState = parseBody.response.players[0];
+        // this.setState({
+        //   playerInfo: ['new array']
+        // })
+        console.log('here is your new state');
+        console.log(this.state.playerInfo);
       },
       error: (err) => {
         console.log('err', err);
@@ -28,7 +38,7 @@ class App extends React.Component {
   render () {
     return (<div>
       <h1>Item List</h1>
-      <List items={this.state.items}/>
+      <List items={this.state.items} playerInfo={this.state.playerInfo}/>
     </div>)
   }
 }
