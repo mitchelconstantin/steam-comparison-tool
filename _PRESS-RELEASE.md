@@ -18,15 +18,19 @@ Once the project moves into development, the press release can be used as a touc
  
 ## Heading ##
   > Name the product in a way the reader (i.e. your target customers) will understand.
+  >  Steam Account Viewer
 
 ## Sub-Heading ##
-  > Describe who the market for the product is and what benefit they get. One sentence only underneath the title.
+  > Describe who the market for the product is and what benefit they get. One sentence only underneath the title. 
+  > For gamers that want to see all of their steam profile stats (and maybe compare it to their friends, or set goals for themselves?)
 
 ## Summary ##
   > Give a summary of the product and the benefit. Assume the reader will not read anything else so make this paragraph good.
+  > Steam Account Viewer lets you view your steam account information in realtime 
 
 ## Problem ##
   > Describe the problem your product solves.
+
 
 ## Solution ##
   > Describe how your product elegantly solves the problem.
@@ -36,7 +40,7 @@ Once the project moves into development, the press release can be used as a touc
 
 ## How to Get Started ##
   > Describe how easy it is to get started.
-
+> Go to the website and type in your steam username!
 ## Customer Quote ##
   > Provide a quote from a hypothetical customer that describes how they experienced the benefit.
 
