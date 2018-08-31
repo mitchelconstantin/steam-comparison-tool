@@ -2,7 +2,6 @@ var express = require("express");
 var bodyParser = require("body-parser");
 // UNCOMMENT THE DATABASE YOU'D LIKE TO USE
 var items = require("../database-mysql");
-var key = require("./steam_key");
 var SteamApi = require('steam-api');
 var request = require('request')
 
