@@ -60,8 +60,34 @@ app.get("/profile", function(req, res) {
       res.send(JSON.stringify(dataToSend)); //sending data back to client
     }
   };
-  steam.getPlayerProfile(req.query.id, sendDataBack);
+  var sendToDb = function (err, data) {
+    if (err) {
+      console.log('error', err);
+    } else {
+      console.log('got your data')
+      var parsedData = JSON.parse(data);
+      console.log('here is the type of your parsed data');
+      console.log(typeof parsedData);
+
+      if (parsedData.response.games) {
+      console.log(' here is your parsed data.response.games');
+        
+        console.log(parsedData.response.games[0]);
+        console.log('you own ', parsedData.response.game_count, 'games');
+        console.log('----------------------------------------------');
   
+        for (var game of parsedData.response.games) {
+          console.log(game.name);
+        }
+      } else {
+        console.log('that user has no games!');
+      }
+
+    }
+  }
+
+  steam.getPlayerProfile(req.query.id, sendDataBack);
+  steam.getPlayerGames(req.query.id, sendToDb)
 });
 
 app.listen(PORT, function() {

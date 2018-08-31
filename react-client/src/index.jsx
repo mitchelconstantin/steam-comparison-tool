@@ -63,6 +63,7 @@ class App extends React.Component {
   render () {
     return (<div>
       <h1>Steam Profile Viewer</h1>
+      <h4> sample steam ids mitchelconstantin Doogla aerobro 76561198015992404</h4>
       <List items={this.state.items} playerInfo={this.state.playerInfo}/>
   <input type='text' value={this.state.searchValue}onChange={this.onChange}/>  
   <button onClick={this.getID}>Get ID!</button>   
