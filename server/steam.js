@@ -28,7 +28,7 @@ var getPlayerID = function(name, cb) {
     } else {
       cb(null, steamHttpBody);
     }
-  });
+  }); 
 };
 
 var getPlayerProfile = function(id, cb) {
@@ -45,6 +45,7 @@ var getPlayerProfile = function(id, cb) {
 };
 
 module.exports = {
-  getPlayerProfile: getPlayerProfile
-  // api_post: api_post
+  getPlayerProfile: getPlayerProfile,
+  getPlayerID:getPlayerID,
+  getPlayerRelationships:getPlayerRelationships
 };

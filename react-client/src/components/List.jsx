@@ -22,18 +22,44 @@ class List extends React.Component {
   render() {
     return (
       <div>
-        <h4> List Component </h4>
-        There are {this.props.items.length} items.
-        {this.props.items.map(item => (
-          <ListItem item={item}  />
-        ))}
-        Here is the test info for the player you requested:
+        <h4> Here is the test info for the player you requested: </h4>
         <h4 />
-       <tr> <img src={this.props.playerInfo.avatar}></img> </tr>
-        {this.showPlayerData(this.props.playerInfo)}
+
+        <table > 
+  <tr>
+  <td> player one </td>
+  <td> <img src={this.props.playerInfo.avatar} height="100" width="100" ></img></td>
+  </tr>
+  <tr>
+    <td> Steam ID: </td>
+    <td> {this.props.playerInfo.steamid} </td>
+  </tr>  
+  <tr>
+    <td> Person Name: </td>
+    <td> {this.props.playerInfo.personaname} </td>
+  </tr>  
+  
+  <tr>
+    <td> Time Created: </td>
+    <td> {this.props.playerInfo.timecreated} </td>
+  </tr>  
+
+   <tr>
+    <td> Last Logoff: </td>
+    <td> {this.props.playerInfo.lastlogoff} </td>
+  </tr>   
+
+        </table>
+
       </div>
     );
   }
 }
+
+// steamid: playerInfo.steamid,
+// personaname: playerInfo.personaname,
+// avatar: playerInfo.avatarfull,
+// timecreated: playerInfo.timecreated,
+// lastlogoff: playerInfo.lastlogoff
 
 export default List;

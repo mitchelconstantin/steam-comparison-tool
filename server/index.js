@@ -8,60 +8,60 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.static(__dirname + "/../react-client/dist"));
 
-app.get("/id"),
-  function(req, res) {
+app.get("/id", function(req, res) {
     console.log("calling get ID ");
-    res.end("200");
-  };
+    var sendIDBack = function (err, data) {
+      if (err) {
+        consle.log('server error')
+        res.end('404');
+      } else {
+        let parsedData = JSON.parse(data)
+        console.log(parsedData.response.steamid);
+        res.end(parsedData.response.steamid || 'not found'); 
+      }
+    }
+  steam.getPlayerID(req.query.id, sendIDBack);
+    
+  });
 
 app.get("/profile", function(req, res) {
-  console.log("calling getPlayerProfile with provided ID");
-  console.log("----------------------------------------------");
-  console.log("here is the incoming req url ", req.query.id);
-  console.log("----------------------------------------------");
+  
 
-  var SendDataBack = function(err, data) {
+  var sendDataBack = function(err, data) {
     if (err) {
       console.log("server error");
       res.end("404");
     } else {
-      console.log("here is the server data", data);
-      var parsedData = JSON.parse(data);
+      let parsedData = JSON.parse(data);
+      let dataToSend = {};
+
 
       if (parsedData.response.players[0]) {
+        // populate dataToSend with data if there is good data
         playerInfo = parsedData.response.players[0];
-        var dataToSend = {
+        dataToSend = {
           steamid: playerInfo.steamid,
           personaname: playerInfo.personaname,
-          avatar: playerInfo.avatar,
+          avatar: playerInfo.avatarfull,
           timecreated: playerInfo.timecreated,
           lastlogoff: playerInfo.lastlogoff
         };
       } else {
-        var dataToSend = {
+        // populate dataToSend with errors if there is bad data
+        dataToSend = {
           steamid: "Error!",
           personaname: "Error!",
-          avatar: "Error!",
+          avatar: "https://i.ytimg.com/vi/DkIVqD8pJt8/maxresdefault.jpg",
           timecreated: "Error!",
           lastlogoff: "Error!"
         };
       }
 
-      console.log("here is the data to send ", dataToSend);
-
-      res.send(JSON.stringify(dataToSend));
+      res.send(JSON.stringify(dataToSend)); //sending data back to client
     }
   };
-  steam.getPlayerProfile(req.query.id, SendDataBack);
-  // res.send('done');
-  // items.selectAll(function(err, data) {
-  //   if(err) {
-  //     res.sendStatus(500);
-  //   } else {
-  //     res.json(data);
-  //     res.end('done')
-  //   }
-  // });
+  steam.getPlayerProfile(req.query.id, sendDataBack);
+  
 });
 
 app.listen(PORT, function() {

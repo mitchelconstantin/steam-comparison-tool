@@ -15,6 +15,9 @@ class App extends React.Component {
     this.getProfile = this.getProfile.bind(this);
     this.getID = this.getID.bind(this);
   }
+  componentDidMount() {
+    this.getProfile('76561198200329058');
+  }
   onChange(e){
     console.log(e);
     this.setState({
@@ -24,10 +27,11 @@ class App extends React.Component {
 
   getID() {
     $.ajax({
-      url: '/user', 
+      url: '/id', 
+      data: {id: this.state.searchValue},
       success: (data) => {
         this.setState({
-          playerInfo: JSON.parse(data)
+          searchValue: JSON.parse(data)
         })
       },
       error: (err) => {
@@ -36,10 +40,10 @@ class App extends React.Component {
     });
   }
 
-  getProfile() {
+  getProfile(id) {
     $.ajax({
       url: '/profile', 
-      data: {id: this.state.searchValue},
+      data: {id: id || this.state.searchValue},
       success: (data) => {
         this.setState({
           playerInfo: JSON.parse(data)
@@ -53,7 +57,7 @@ class App extends React.Component {
 
   render () {
     return (<div>
-      <h1>Item List</h1>
+      <h1>Steam Profile Viewer</h1>
       <List items={this.state.items} playerInfo={this.state.playerInfo}/>
   <input type='text' value={this.state.searchValue}onChange={this.onChange}/>  
   <button onClick={this.getID}>Get ID!</button>   
