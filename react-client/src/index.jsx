@@ -9,17 +9,18 @@ class App extends React.Component {
     this.state = { 
       items: ['Hello','World'],
       playerInfo: [['test', 123]],
-      searchValue: ''
+      searchValue: '76561198200329058'
     }
     this.onChange = this.onChange.bind(this);
     this.getProfile = this.getProfile.bind(this);
     this.getID = this.getID.bind(this);
   }
   componentDidMount() {
-    this.getProfile('76561198200329058');
+    // this.setState({searchValue: '76561198200329058'})
+    this.getProfile();
   }
   onChange(e){
-    console.log(e);
+    console.log(e.target.value);
     this.setState({
       searchValue: e.target.value
     })
@@ -40,14 +41,18 @@ class App extends React.Component {
     });
   }
 
-  getProfile(id) {
+  getProfile() {
+    // console.log('typeof', typeof id);
+    // console.log(id);
     $.ajax({
       url: '/profile', 
-      data: {id: id || this.state.searchValue},
+      data: {id:  this.state.searchValue},
       success: (data) => {
         this.setState({
-          playerInfo: JSON.parse(data)
+          playerInfo: JSON.parse(data),
+          searchValue: ''
         })
+
       },
       error: (err) => {
         console.log('err', err);
