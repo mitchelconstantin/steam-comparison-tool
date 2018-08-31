@@ -2,31 +2,49 @@ var express = require("express");
 var bodyParser = require("body-parser");
 // UNCOMMENT THE DATABASE YOU'D LIKE TO USE
 var items = require("../database-mysql");
-var SteamApi = require('steam-api');
-var request = require('request')
+var SteamApi = require("steam-api");
+var request = require("request");
+var KEY = process.env.STEAM_API_KEY;
+
+var getPlayerRelationships = function(id, cb) {
+  var user = new SteamApi.User(KEY, id);
+  console.log("got a user object", user);
+  var relationships = user
+    .GetFriendList((optionalRelationship = "all"), (optionalSteamId = ""))
+    .done(function(result) {
+      console.log("relationship query successful");
+    });
+};
+
+var getPlayerID = function(name, cb) {
+  //my url https://steamcommunity.com/id/mitchelconstantin
+  // get ID by vanity url:
+  // http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=33A2CF357B0BEAAB1F5F24200AAA55CE&vanityurl=mitchelconstantin
+  var url = `http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=${KEY}&vanityurl=${name}`;
+  
+  request.get(url, function(err, steamHttpResponse, steamHttpBody) {
+    if (err) {
+      cb(err, null);
+    } else {
+      cb(null, steamHttpBody);
+    }
+  });
+};
 
 var getPlayerProfile = function(id, cb) {
-  var SteamKey = process.env.STEAM_API_KEY;
-  var user = new SteamApi.User(SteamKey, id);
-  console.log('got a user object', user);
-  var relationships = user.GetFriendList(optionalRelationship = 'all', optionalSteamId = '')
-    .done(function(result){
-    console.log('relationship query successful');
+  // creating URL to query Steam API
+  var url = `http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${KEY}&steamids=${id}`;
+
+  request.get(url, function(err, steamHttpResponse, steamHttpBody) {
+    if (err) {
+      cb(err, null);
+    } else {
+      cb(null, steamHttpBody);
+    }
   });
-
-  console.log('getting player summary from URL');
-  var url = `http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${SteamKey}&steamids=${id}`
-
-  request.get(url, function(error, steamHttpResponse, steamHttpBody) {
-    // Print to console to prove we downloaded the achievements.
-    cb(steamHttpBody);
-});
-
-  //
-  // console.log(relationships);
 };
 
 module.exports = {
-  getPlayerProfile: getPlayerProfile,
+  getPlayerProfile: getPlayerProfile
   // api_post: api_post
 };

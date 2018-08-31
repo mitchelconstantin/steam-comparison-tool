@@ -9,37 +9,57 @@ class App extends React.Component {
     this.state = { 
       items: ['Hello','World'],
       playerInfo: [['test', 123]],
+      searchValue: ''
     }
+    this.onChange = this.onChange.bind(this);
+    this.getProfile = this.getProfile.bind(this);
+    this.getID = this.getID.bind(this);
+  }
+  onChange(e){
+    console.log(e);
+    this.setState({
+      searchValue: e.target.value
+    })
   }
 
-  // componentDidMount() {
-  //   $.ajax({
-  //     url: '/user', 
-  //     success: (data) => {
-  //       var parseBody = JSON.parse(data);
-  //       console.log('here is your JSON DATA');
-  //       // console.log(parseBody);
+  getID() {
+    $.ajax({
+      url: '/user', 
+      success: (data) => {
+        this.setState({
+          playerInfo: JSON.parse(data)
+        })
+      },
+      error: (err) => {
+        console.log('err', err);
+      }
+    });
+  }
 
-  //       // console.log('here is parseBody.response.players[0]');
-  //       // console.log(parseBody.response.players[0]);
-  //       // var newState = parseBody.response.players[0];
-  //       this.setState({
-  //         playerInfo: JSON.parse(data)
-  //       })
-  //       console.log('here is your new state');
-  //       console.log(this.state.playerInfo);
-  //     },
-  //     error: (err) => {
-  //       console.log('err', err);
-  //     }
-  //   });
-  // }
+  getProfile() {
+    $.ajax({
+      url: '/profile', 
+      data: {id: this.state.searchValue},
+      success: (data) => {
+        this.setState({
+          playerInfo: JSON.parse(data)
+        })
+      },
+      error: (err) => {
+        console.log('err', err);
+      }
+    });
+  }
 
   render () {
     return (<div>
       <h1>Item List</h1>
       <List items={this.state.items} playerInfo={this.state.playerInfo}/>
-    </div>)
+  <input type='text' value={this.state.searchValue}onChange={this.onChange}/>  
+  <button onClick={this.getID}>Get ID!</button>   
+  <button onClick={this.getProfile}>Get Profile!</button>  
+    </div>
+  )
   }
 }
 
