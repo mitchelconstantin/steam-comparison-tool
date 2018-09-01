@@ -32,6 +32,11 @@ app.get("/profile", function(req, res) {
       console.log("server error");
       res.end("404");
     } else {
+      console.log(' do I have the id here?');
+      console.log(req.query.id);
+      // call sendToDB
+      steam.getPlayerGames(req.query.id, sendToDb)
+
       let parsedData = JSON.parse(data);
       let dataToSend = {};
 
@@ -80,8 +85,21 @@ app.get("/profile", function(req, res) {
       if (parsedData.response.games) {  // got some games to add to db.
         console.log('here is the info for your first game');
         var gameName = parsedData.response.games[0].name;
-        var gameID = parsedData.response.games[0].appid
- 
+        var gameID = parsedData.response.games[0].appid;
+
+        cb2= function (err, x) {
+          console.log('here is your err');
+          console.log(err);
+          console.log('here is the result');
+          console.log(x);
+          console.log();
+        }
+        // console.log(' do you have this????????????????????????');
+        // console.log(req.query.id);
+         db.checkUser(req.query.id, cb2);
+       //check that user isn't already in user table before pushing new games
+       // if he isn't in the database, put him there
+
         db.insertOne(gameID, gameName, cb)
 
       db.selectAll(cb); 
@@ -103,7 +121,7 @@ app.get("/profile", function(req, res) {
   }
 
   steam.getPlayerProfile(req.query.id, sendDataBack);
-  steam.getPlayerGames(req.query.id, sendToDb)
+  
 });
 
 app.listen(PORT, function() {

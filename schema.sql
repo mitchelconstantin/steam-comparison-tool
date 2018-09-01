@@ -4,6 +4,11 @@ CREATE DATABASE Games;
 
 USE Games;
 
+CREATE TABLE users (
+  id int NOT NULL ,
+  PRIMARY KEY (ID)
+);
+
 CREATE TABLE games (
   id int NOT NULL ,
   occurances integer NOT NULL,
