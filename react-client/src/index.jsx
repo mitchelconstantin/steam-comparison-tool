@@ -150,8 +150,8 @@ class App extends React.Component {
           value={this.state.searchValue}
           onChange={this.onChange}
         />
-        <button onClick={this.getID}>Get ID!</button>
-        <button onClick={this.getProfile}>Get Profile!</button>
+        <button className="btn btn-primary"  onClick={this.getID}>Get ID!</button>
+        <button className="btn btn-secondary"onClick={this.getProfile}>Get Profile!</button>
         <Games topGames={this.state.topGames} />
       </div>
     );
