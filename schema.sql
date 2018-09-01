@@ -12,7 +12,7 @@ CREATE TABLE users (
 CREATE TABLE games (
   id int NOT NULL ,
   occurances integer NOT NULL,
-  name varchar(50) NOT NULL,
+  name varchar(255) NOT NULL,
   PRIMARY KEY (ID)
 );
 

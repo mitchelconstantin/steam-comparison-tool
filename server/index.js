@@ -4,59 +4,148 @@ var bodyParser = require("body-parser");
 var db = require("../database-mysql");
 var steam = require("./steam");
 var app = express();
+// app.use(express.json());   
+bodyParser.urlencoded({extended:true});
+app.use(bodyParser.json());
 const PORT = process.env.PORT || 3000;
 
 app.use(express.static(__dirname + "/../react-client/dist"));
 
 app.get("/id", function(req, res) {
-    console.log("calling get ID ");
-    var sendIDBack = function (err, data) {
-      if (err) {
-        consle.log('server error')
-        res.end('404');
-      } else {
-        let parsedData = JSON.parse(data)
-        console.log(parsedData.response.steamid);
-        res.end(parsedData.response.steamid || 'not found'); 
-      }
+  console.log(
+    "----------------------------------------------------------------"
+  );
+  console.log("GET to /id");
+  console.log(
+    "----------------------------------------------------------------"
+  );
+  var sendIDBack = function(err, data) {
+    if (err) {
+      consle.log("server error");
+      res.end("404");
+    } else {
+      let parsedData = JSON.parse(data);
+      console.log(parsedData.response.steamid);
+      res.end(parsedData.response.steamid || "not found");
     }
+  };
   steam.getPlayerID(req.query.id, sendIDBack);
-    
-  });
+});
 
-  app.get("/games", function (req, res) {
-    console.log('calling get top games');
-    var sendGamesBack = function (err, data) {
-      if (err) {
-        console.log('db error')
-        res.end('404'); 
-      } else{
-        console.log('got the top 10 games')
-        console.log(data);
-        let parsedData = JSON.stringify(data)
+app.post("/games", function(req, res) {
+  console.log(
+    "----------------------------------------------------------------"
+  );
+  console.log("POST to /games");
+  console.log('here is the req body', req.body.id);
+  console.log(
+    "----------------------------------------------------------------"
+  );
+  // res.send("404");
 
-        res.end(parsedData);
+  var sendToDb = function(err, data) {
+    if (err) {
+      console.log("error", err);
+    } else {
+      console.log("got your data inside sendToDb");
+      console.log(data);
+      var parsedData = JSON.parse(data);
+
+      if (parsedData.response.games) {
+        console.log("got some games to add to db");
+        console.log(parsedData.response.games)
+        // inserting all of that users games into the DB
+        let dbPromises = parsedData.response.games.map(element => {
+          var newPromise = new Promise((resolve, reject) => {
+            db.insertOne(element.appid, element.name, (err, result) => {
+              if (err) {
+                console.log('---------------------------------------')
+                console.log('err in promise')
+                console.log(err)
+                // reject(err);
+              } else {
+                resolve(result);
+              }
+            });
+          }); 
+          return newPromise;
+          // db.save(element.id, element.name, element.owner.login, element.forks_count, element.open_issues, callback)
+        });
+        Promise.all(dbPromises)
+          .then(() => {res.send("201")})
+          .catch(() =>{console.log('404', err)});
+        // got some games to add to db.
+      } else {
+        res.send("404");
       }
     }
-    db.getTopGames(sendGamesBack);
-  });
+  };
+  // steam.getPlayerGames(req.body.id, sendToDb);
 
-app.get("/profile", function(req, res) { 
-  
+  newUserCreation = function(err, x) {
+    if (err) {
+      console.log("here is your err");
+      console.log(err);
+      res.send("404");
+    } else {
+      if (x.length < 1) {
+        //if user not in DB
+        db.insertUser(req.body.id, () => console.log("user inserted into DB"));
 
+        // get list of all his games
+        steam.getPlayerGames(req.body.id, sendToDb);
+      } else {
+        res.send("404");
+      }
+    }
+  };
+  console.log("calling checkuser");
+  db.checkUser(req.body.id, newUserCreation);
+  //check that user isn't already in user table before pushing new games
+  // if he isn't in the database, put him there
+});
+
+app.get("/games", function(req, res) {
+  console.log(
+    "----------------------------------------------------------------"
+  );
+  console.log("GET to /games");
+  console.log(
+    "----------------------------------------------------------------"
+  );
+  var sendGamesBack = function(err, data) {
+    if (err) {
+      console.log("db error");
+      res.end("404");
+    } else {
+      console.log("got the top 10 games , sending back to client now ");
+      console.log(data);
+      // parsedData = JSON.stringify('hi')
+      res.end(JSON.stringify(data));
+    }
+  };
+  db.getTopGames(sendGamesBack);
+});
+
+app.get("/profile", function(req, res) {
+  console.log(
+    "----------------------------------------------------------------"
+  );
+  console.log("GET to /profile");
+  console.log(
+    "----------------------------------------------------------------"
+  );
   var sendDataBack = function(err, data) {
     if (err) {
       console.log("server error");
       res.end("404");
     } else {
-      console.log(' do I have the id here?');
+      console.log(" do I have the id here?");
       console.log(req.query.id);
       // call sendToDB
-      steam.getPlayerGames(req.query.id, sendToDb)
 
       let parsedData = JSON.parse(data);
       let dataToSend = {};
-
 
       if (parsedData.response.players[0]) {
         // populate dataToSend with data if there is good data
@@ -82,67 +171,8 @@ app.get("/profile", function(req, res) {
       res.send(JSON.stringify(dataToSend)); //sending data back to client
     }
   };
-  var sendToDb = function (err, data) {
-    if (err) {
-      console.log('error', err);
-    } else {
-      console.log('got your data')
-      var parsedData = JSON.parse(data);
-      console.log('here is the type of your parsed data');
-      console.log(typeof parsedData);
-
-      cb = function (err, x) {
-        console.log('here is your err');
-        console.log(err);
-        console.log('here is the result');
-        console.log(x);
-      }
-
-
-      if (parsedData.response.games) {  // got some games to add to db.
-        console.log('here is the info for your first game');
-        var gameName = parsedData.response.games[0].name;
-        var gameID = parsedData.response.games[0].appid;
-
-        cb2= function (err, x) {
-          if (err) {
-            console.log('here is your err');
-            console.log(err);
-          } else {
-          console.log('ouput of checking if user is in the database: ');
-          console.log(x);
-          if (x.length < 1) {
-            console.log('adding user to DB! : ', req.query.id);
-            db.insertUser(req.query.id, cb);
-            console.log('I still have all of his games btw, :')
-            parsedData.response.games.forEach(element => {
-              // console.log('here is hte element: ------------------')
-              // console.log(element);
-              db.insertOne(element.appid, element.name, cb)
-            });
-            console.log('done inserting new games, here is the new top 10')
-            db.getTopGames(cb);
-          }
-          }
-
-        }
-        // console.log(' do you have this????????????????????????');
-        // console.log(req.query.id);
-         db.checkUser(req.query.id, cb2);
-       //check that user isn't already in user table before pushing new games
-       // if he isn't in the database, put him there
-
-      // db.insertOne(gameID, gameName, cb) // put one game into DB
-
-      db.selectAll(cb); 
-
-      }
-
-    }
-  }
 
   steam.getPlayerProfile(req.query.id, sendDataBack);
-  
 });
 
 app.listen(PORT, function() {
