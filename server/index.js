@@ -1,7 +1,7 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 // UNCOMMENT THE DATABASE YOU'D LIKE TO USE
-var items = require("../database-mysql");
+var db = require("../database-mysql");
 var steam = require("./steam");
 var app = express();
 const PORT = process.env.PORT || 3000;
@@ -69,16 +69,32 @@ app.get("/profile", function(req, res) {
       console.log('here is the type of your parsed data');
       console.log(typeof parsedData);
 
-      if (parsedData.response.games) {
-      console.log(' here is your parsed data.response.games');
+      cb = function (err, x) {
+        console.log('here is your err');
+        console.log(err);
+        console.log('here is the result');
+        console.log(x);
+      }
+
+
+      if (parsedData.response.games) {  // got some games to add to db.
+        console.log('here is the info for your first game');
+        var gameName = parsedData.response.games[0].name;
+        var gameID = parsedData.response.games[0].appid
+ 
+        db.insertOne(gameID, gameName, cb)
+
+      db.selectAll(cb); 
+
+      // console.log(' here is your parsed data.response.games');
         
-        console.log(parsedData.response.games[0]);
-        console.log('you own ', parsedData.response.game_count, 'games');
-        console.log('----------------------------------------------');
-  
-        for (var game of parsedData.response.games) {
-          console.log(game.name);
-        }
+      //   console.log(parsedData.response.games[0]);
+      //   console.log('you own ', parsedData.response.game_count, 'games');
+      //   console.log('----------------------------------------------');
+
+      //   for (var game of parsedData.response.games) {
+      //     console.log(game.name);
+        // }
       } else {
         console.log('that user has no games!');
       }

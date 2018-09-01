@@ -1,16 +1,18 @@
-DROP DATABASE IF EXISTS test;
+DROP DATABASE IF EXISTS Games;
 
-CREATE DATABASE test;
+CREATE DATABASE Games;
 
-USE test;
+USE Games;
 
-CREATE TABLE items (
-  id int NOT NULL AUTO_INCREMENT,
-  quantity integer NOT NULL,
-  description varchar(50) NOT NULL,
+CREATE TABLE games (
+  id int NOT NULL ,
+  occurances integer NOT NULL,
+  name varchar(50) NOT NULL,
   PRIMARY KEY (ID)
 );
 
 /*  Execute this file from the command line by typing:
  *    mysql -u root < server/schema.sql
  *  to create the database and the tables.*/
+
+-- INSERT into Games (id, occurances, name) VALUES (1,1,'I am a game!');
