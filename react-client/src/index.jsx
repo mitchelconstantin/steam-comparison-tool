@@ -136,7 +136,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <div>
+      <div class="file2">
         <h1>Steam Profile Viewer</h1>
         <h4>
           {" "}
