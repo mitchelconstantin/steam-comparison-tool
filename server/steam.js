@@ -17,9 +17,6 @@ var getPlayerRelationships = function(id, cb) {
 };
 
 var getPlayerID = function(name, cb) {
-  //my url https://steamcommunity.com/id/mitchelconstantin
-  // get ID by vanity url:
-  // http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=33A2CF357B0BEAAB1F5F24200AAA55CE&vanityurl=mitchelconstantin
   var url = `http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=${KEY}&vanityurl=${name}`;
   
   request.get(url, function(err, steamHttpResponse, steamHttpBody) {

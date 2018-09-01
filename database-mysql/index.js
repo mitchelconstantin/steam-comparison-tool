@@ -60,12 +60,23 @@ var insertOne = function(id, name, callback) {
   });
 };
 
-module.exports.selectAll = selectAll;
+var getTopGames = function( callback) {
+  var query = "SELECT * from games WHERE occurances > 1 ORDER BY occurances LIMIT 10";
+  connection.query(query, function(err, results, fields) {
+    if (err) {
+      callback(err, null);
+    } else {
+      callback(null, results);
+    }
+  });
+};
+
 
 module.exports = {
   selectAll: selectAll,
   insertOne: insertOne,
   checkUser: checkUser,
-  insertUser: insertUser
+  insertUser: insertUser,
+  getTopGames : getTopGames
   
 };

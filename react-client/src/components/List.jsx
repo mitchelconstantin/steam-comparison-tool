@@ -7,20 +7,6 @@ class List extends React.Component {
     this.state = {};
   }
 
-  showPlayerData(object) {
-    console.log(object);
-    let renderTable = [];
-    for (var key in object) {
-      if (key !== "avatar") {
-        renderTable.push(
-          <tr>
-            {key} {object[key]}
-          </tr>
-        );
-      }
-    }
-    return renderTable;
-  }
 
   render() {
     return (

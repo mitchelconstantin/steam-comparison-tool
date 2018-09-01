@@ -5,7 +5,7 @@ CREATE DATABASE Games;
 USE Games;
 
 CREATE TABLE users (
-  id int NOT NULL ,
+  id bigint NOT NULL ,
   PRIMARY KEY (ID)
 );
 

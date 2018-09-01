@@ -24,7 +24,24 @@ app.get("/id", function(req, res) {
     
   });
 
-app.get("/profile", function(req, res) {
+  app.get("/games", function (req, res) {
+    console.log('calling get top games');
+    var sendGamesBack = function (err, data) {
+      if (err) {
+        console.log('db error')
+        res.end('404'); 
+      } else{
+        console.log('got the top 10 games')
+        console.log(data);
+        let parsedData = JSON.stringify(data)
+
+        res.end(parsedData);
+      }
+    }
+    db.getTopGames(sendGamesBack);
+  });
+
+app.get("/profile", function(req, res) { 
   
 
   var sendDataBack = function(err, data) {
@@ -88,11 +105,26 @@ app.get("/profile", function(req, res) {
         var gameID = parsedData.response.games[0].appid;
 
         cb2= function (err, x) {
-          console.log('here is your err');
-          console.log(err);
-          console.log('here is the result');
+          if (err) {
+            console.log('here is your err');
+            console.log(err);
+          } else {
+          console.log('ouput of checking if user is in the database: ');
           console.log(x);
-          console.log();
+          if (x.length < 1) {
+            console.log('adding user to DB! : ', req.query.id);
+            db.insertUser(req.query.id, cb);
+            console.log('I still have all of his games btw, :')
+            parsedData.response.games.forEach(element => {
+              // console.log('here is hte element: ------------------')
+              // console.log(element);
+              db.insertOne(element.appid, element.name, cb)
+            });
+            console.log('done inserting new games, here is the new top 10')
+            db.getTopGames(cb);
+          }
+          }
+
         }
         // console.log(' do you have this????????????????????????');
         // console.log(req.query.id);
@@ -100,21 +132,10 @@ app.get("/profile", function(req, res) {
        //check that user isn't already in user table before pushing new games
        // if he isn't in the database, put him there
 
-        db.insertOne(gameID, gameName, cb)
+      // db.insertOne(gameID, gameName, cb) // put one game into DB
 
       db.selectAll(cb); 
 
-      // console.log(' here is your parsed data.response.games');
-        
-      //   console.log(parsedData.response.games[0]);
-      //   console.log('you own ', parsedData.response.game_count, 'games');
-      //   console.log('----------------------------------------------');
-
-      //   for (var game of parsedData.response.games) {
-      //     console.log(game.name);
-        // }
-      } else {
-        console.log('that user has no games!');
       }
 
     }
