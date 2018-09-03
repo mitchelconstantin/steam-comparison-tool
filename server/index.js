@@ -74,7 +74,7 @@ app.post("/games", function(req, res) {
         });
         Promise.all(dbPromises)
           .then(() => {res.send("201")})
-          .catch(() =>{console.log('404', err)});
+          .catch(() =>{console.log('404', err); res.send('404')});
         // got some games to add to db.
       } else {
         res.send("404");
@@ -229,6 +229,7 @@ function cbdb (err, data) {
 
 console.log('populating the new DB');
 db2.populateDB(cbdb);
+res.send('201');
 })
 
 
@@ -244,6 +245,7 @@ app.post("/databasePrint", function(req, res) {
 console.log('all info from the new DB');
 db2.selectAll('users',(err, data)=>console.log('user table: ', data.rows));
 db2.selectAll('games', (err, data)=>console.log('games table: ', data.rows));
+res.send('201');
 })
 
 
