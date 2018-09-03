@@ -9,8 +9,8 @@ class Games extends React.Component {
 
   showGamesData() {
     let renderTable = [];
-    console.log('game length')
-    console.log(this.props.topGames.length);
+    // console.log('game length')
+    // console.log(this.props.topGames.length);
     if (this.props.topGames.length < 2) {
       renderTable.push(
       <tr>
@@ -27,23 +27,28 @@ class Games extends React.Component {
         );
       }
     }
-
     return renderTable;
   }
 
   render() {
     return (
-      <div>
+      <div className="col-sm">
+        
+        
+        <table className="table table-striped table-dark table-hover">
+        <thead>
         <h4>
           Games in common:
         </h4>
-        <h4 />
-        <table>
+   
+          </thead>
+          <tbody>
           <tr>
-            <td> Name of Game </td>
-            <td> Number of Occurances </td>
+            <th> Name of Game </th>
+            <th> Number of Occurances </th>
           </tr>
          {this.showGamesData()}
+         </tbody>
         </table>
       </div>
     );

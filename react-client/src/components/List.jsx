@@ -10,11 +10,13 @@ class List extends React.Component {
 
   render() {
     return (
-      <div>
-        <h4> Here is the test info for the player you requested: </h4>
-        <h4 />
+      <div className="col-sm">
+        
+       
 
-        <table>
+        <table className="table table-striped table-dark">
+        <tbody>
+        <h4> Player info: </h4>
           <tr>
             <td> player one </td>
             <td>
@@ -26,6 +28,7 @@ class List extends React.Component {
               />
             </td>
           </tr>
+
           <tr>
             <td> Steam ID: </td>
             <td> {this.props.playerInfo.steamid} </td>
@@ -44,6 +47,7 @@ class List extends React.Component {
             <td> Last Logoff: </td>
             <td> {this.props.playerInfo.lastlogoff} </td>
           </tr>
+          </tbody>
         </table>
       </div>
     );

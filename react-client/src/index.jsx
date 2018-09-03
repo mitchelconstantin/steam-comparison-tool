@@ -8,7 +8,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      status: "",
+      status: "---------nothing to report -----------",
       playerInfo: [["test", 123]],
       searchValue: "76561198200329058",
       topGames: [{}]
@@ -21,13 +21,16 @@ class App extends React.Component {
     this.getProfile();
   }
   onChange(e) {
-    console.log(e.target.value);
+    console.log("setting the new search value: ", e.target.value);
     this.setState({
       searchValue: e.target.value
     });
   }
 
   getID() {
+    console.log("-----------------");
+    console.log("GETTING ID");
+    console.log("-----------------");
     $.ajax({
       url: "/id",
       data: { id: this.state.searchValue },
@@ -67,7 +70,9 @@ class App extends React.Component {
           });
         }
       },
-      done: (x) => {console.log("we done")},
+      done: x => {
+        console.log("we done");
+      },
       error: err => {
         console.log("wow this failed");
         console.log("err", err);
@@ -76,7 +81,9 @@ class App extends React.Component {
   }
 
   getTopGames() {
-    console.log("post top games was called");
+    console.log("-----------------");
+    console.log("GETTING TOP GAMES");
+    console.log("-----------------");
     $.ajax({
       url: "/games",
       data: { id: this.state.searchValue },
@@ -103,56 +110,78 @@ class App extends React.Component {
     // console.log('typeof', typeof id);
     // console.log(id);
     var nums = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+    var containsText = false;
+    console.log(
+      "looping through searchvalue to look for letters, ",
+      this.state.searchValue
+    );
     for (var i = 0; i < this.state.searchValue.length; i++) {
-      if (!nums.includes(this.state.searchValue[i])) var containsText = true;
-      break;
+      if (!nums.includes(this.state.searchValue[i])) containsText = true;
+      console.log("that is not a profile");
     }
-    if (!containsText) {
+    if (containsText) {
       this.setState({
-        status: ""
+        status: "Incorrect format, ID must be only numbers",
+        searchValue: "12"
       });
-
-      $.ajax({
-        url: "/profile",
-        data: { id: this.state.searchValue || 76561198200329058 },
-        success: data => {
-          console.log("calling post top games");
-          this.postTopGames();
-          this.setState({
-            playerInfo: JSON.parse(data)
-          });
-        },
-        error: err => {
-          console.log("err", err);
-        }
-      });
+      console.log("here is the status:");
     } else {
       this.setState({
-        status:
-          "That input contains a letter. Consider clicking the Get ID button first!"
+        status: "---------nothing to report -----------"
       });
     }
+    console.log("!containsText is true");
+
+    $.ajax({
+      url: "/profile",
+      data: { id: this.state.searchValue },
+      success: data => {
+        console.log("calling post top games");
+        this.postTopGames();
+        this.setState({
+          playerInfo: JSON.parse(data)
+        });
+      },
+      error: err => {
+        console.log("err", err);
+      }
+    });
   }
 
   render() {
     return (
-      <div class="file2">
-        <h1>Steam Profile Viewer</h1>
+      <div class="file2" className="container bg-dark">
+        <div className="navbar navbar-dark bg-dark ">
+          <h4 className="navbar-brand text-white">Steam Profile Viewer</h4>
+          <div>
+            <input
+              type="text"
+              value={this.state.searchValue}
+              onChange={this.onChange}
+            />
+            {/* <form className="form-inline my-2 my-lg-0" /> */}
+
+            <button className="btn btn-primary" onClick={this.getID}>
+              Get ID!
+            </button>
+            <button className="btn btn-secondary" onClick={this.getProfile}>
+              Get Profile!
+            </button>
+          </div>
+        </div>
+        <div className="navbar navbar-dark bg-dark ">
+        <h4 className="text-white"> status: {this.state.status} </h4>
+        </div>
+        <div className="row ">
+          <List items={this.state.items} playerInfo={this.state.playerInfo} />
+
+          <Games topGames={this.state.topGames} />
+        </div>
         <h4>
           {" "}
           sample steam ids mitchelconstantin Doogla aerobro 76561198015992404
           76561198040706268 76561198012307420
         </h4>
-        <List items={this.state.items} playerInfo={this.state.playerInfo} />
-        <h4> status: {this.state.status} </h4>
-        <input
-          type="text"
-          value={this.state.searchValue}
-          onChange={this.onChange}
-        />
-        <button className="btn btn-primary"  onClick={this.getID}>Get ID!</button>
-        <button className="btn btn-secondary"onClick={this.getProfile}>Get Profile!</button>
-        <Games topGames={this.state.topGames} />
       </div>
     );
   }
