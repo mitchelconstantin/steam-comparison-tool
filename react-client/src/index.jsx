@@ -137,8 +137,6 @@ class App extends React.Component {
   }
 
   getProfile() {
-    // console.log('typeof', typeof id);
-    // console.log(id);
     var nums = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
     var containsText = false;
     console.log(
