@@ -88,6 +88,7 @@ class App extends React.Component {
       url: "/games",
       data: { id: this.state.searchValue },
       success: data => {
+        console.log("got data back from top games: ", data);
         this.setState({
           searchValue: ""
         });
@@ -105,6 +106,50 @@ class App extends React.Component {
       }
     });
   }
+  resetDB() {
+    console.log(" resetting the DB!");
+    $.ajax({
+      type: "POST",
+      url: "/database",
+      success: data => {
+        console.log("database has been reset", data);
+      },
+      error: err => {
+        console.log("resetting DB failed");
+        console.log("err", err);
+      }
+    });
+  }
+
+  populate() {
+    console.log(" populating the DB!");
+    $.ajax({
+      type: "POST",
+      url: "/databasePop",
+      success: data => {
+        console.log("database has been reset", data);
+      },
+      error: err => {
+        console.log("resetting DB failed");
+        console.log("err", err);
+      }
+    });
+  }
+
+  printTables() {
+    console.log(" printing the tables!");
+    $.ajax({
+      type: "POST",
+      url: "/databasePrint",
+      success: data => {
+        console.log("database has been reset", data);
+      },
+      error: err => {
+        console.log("resetting DB failed");
+        console.log("err", err);
+      }
+    });
+  }
 
   getProfile() {
     // console.log('typeof', typeof id);
@@ -115,8 +160,20 @@ class App extends React.Component {
       "looping through searchvalue to look for letters, ",
       this.state.searchValue
     );
-    for (var i = 0; i < this.state.searchValue.length; i++) {
-      if (!nums.includes(this.state.searchValue[i])) containsText = true;
+    var searchTerm = this.state.searchValue;
+    for (var i = 0; i < searchTerm.length; i++) {
+      if (!nums.includes(searchTerm[i])) {
+        if (searchTerm[i] === " ") {
+          console.log("it is a space");
+          // searchTerm.splice(i, 1);
+          var newStr = searchTerm.split(""); // or newStr = [...str];
+          newStr.splice(i, 1);
+          searchTerm = newStr.join("");
+        } else {
+          containsText = true;
+        }
+      }
+
       console.log("that is not a profile");
     }
     if (containsText) {
@@ -182,6 +239,15 @@ class App extends React.Component {
           sample steam ids: 76561198015992404 76561198040706268
           76561198012307420
         </h4>
+        <button className="btn btn-secondary" onClick={this.resetDB}>
+          Reset DB!
+        </button>
+        <button className="btn btn-secondary" onClick={this.populate}>
+          populate DB!
+        </button>
+        <button className="btn btn-secondary" onClick={this.printTables}>
+          see all DB!
+        </button>
       </div>
     );
   }

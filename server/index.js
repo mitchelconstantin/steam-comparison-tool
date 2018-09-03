@@ -1,12 +1,11 @@
 var express = require("express");
 var bodyParser = require("body-parser");
-// UNCOMMENT THE DATABASE YOU'D LIKE TO USE
 var db = require("../database-mysql");
+var db2 = require("../database-pg")
 var steam = require("./steam");
 var app = express();
-// app.use(express.json());   
 bodyParser.urlencoded({extended:true});
-app.use(bodyParser.json());
+app.use(bodyParser.json()); 
 const PORT = process.env.PORT || 3000;
 
 app.use(express.static(__dirname + "/../react-client/dist"));
@@ -34,30 +33,32 @@ app.get("/id", function(req, res) {
 
 app.post("/games", function(req, res) {
   console.log(
-    "----------------------------------------------------------------"
-  );
+    "-------------------------------------------------------------");
   console.log("POST to /games");
   console.log('here is the req body', req.body.id);
   console.log(
     "----------------------------------------------------------------"
   );
-  // res.send("404");
+  // testing progress db
 
   var sendToDb = function(err, data) {
     if (err) {
       console.log("error", err);
     } else {
       console.log("got your data inside sendToDb");
-      console.log(data);
+      if (data) {
       var parsedData = JSON.parse(data);
 
       if (parsedData.response.games) {
         console.log("got some games to add to db");
-        console.log(parsedData.response.games)
+        // console.log(parsedData.response.games)
+        console.log('------------------------------------');
         // inserting all of that users games into the DB
+        console.log('here is the first game: ');
+        console.log(parsedData.response.games[0]);
         let dbPromises = parsedData.response.games.map(element => {
           var newPromise = new Promise((resolve, reject) => {
-            db.insertOne(element.appid, element.name, (err, result) => {
+            db2.insertOne(element.appid, element.name, (err, result) => {
               if (err) {
                 console.log('---------------------------------------')
                 console.log('err in promise')
@@ -78,19 +79,23 @@ app.post("/games", function(req, res) {
       } else {
         res.send("404");
       }
+    }  else {
+      res.send("404");
     }
+  }
   };
   // steam.getPlayerGames(req.body.id, sendToDb);
 
-  newUserCreation = function(err, x) {
+  newUserCreation = function(err, data) {
+    console.log('inside newUserCreation, data: ', data.rowCount);
     if (err) {
       console.log("here is your err");
       console.log(err);
       res.send("404");
     } else {
-      if (x.length < 1) {
+      if (data.rowCount < 1) {
         //if user not in DB
-        db.insertUser(req.body.id, () => console.log("user inserted into DB"));
+        db2.insertUser(req.body.id, () => console.log("user inserted into DB"));
 
         // get list of all his games
         steam.getPlayerGames(req.body.id, sendToDb);
@@ -100,7 +105,7 @@ app.post("/games", function(req, res) {
     }
   };
   console.log("calling checkuser");
-  db.checkUser(req.body.id, newUserCreation);
+  db2.checkUser(req.body.id, newUserCreation);
   //check that user isn't already in user table before pushing new games
   // if he isn't in the database, put him there
 });
@@ -119,12 +124,13 @@ app.get("/games", function(req, res) {
       res.end("404");
     } else {
       console.log("got the top 10 games , sending back to client now ");
-      console.log(data);
+      console.log('raw data: ', data);
+      console.log('row data:' , data.rows);
       // parsedData = JSON.stringify('hi')
-      res.end(JSON.stringify(data));
+      res.end(JSON.stringify(data.rows)); 
     }
   };
-  db.getTopGames(sendGamesBack);
+  db2.getTopGames(sendGamesBack);
 });
 
 app.get("/profile", function(req, res) {
@@ -174,6 +180,72 @@ app.get("/profile", function(req, res) {
 
   steam.getPlayerProfile(req.query.id, sendDataBack);
 });
+
+
+app.post("/database", function(req, res) {
+  console.log(
+    "-------------------------------------------------------------");
+  console.log("POST to /database");
+  console.log('here is the req body', req.body.id);
+  console.log(
+    "----------------------------------------------------------------"
+  );
+  // testing progress db
+function cbdb (err, data) {
+  console.log('pOst-------------------------');
+  if (err) {
+    console.log(' POSTGRESthere was an err, ', err);
+  }
+  else {
+    console.log('POSTGRESsuccess, heres data, ', data);
+  }
+  console.log('pOst-------------------------');
+}
+
+console.log('resetting the new DB');
+db2.resetDB(cbdb);
+})
+
+app.post("/databasePop", function(req, res) {
+  console.log(
+    "-------------------------------------------------------------");
+  console.log("POST to /databasePop");
+  console.log(
+    "----------------------------------------------------------------"
+  );
+  // testing progress db
+function cbdb (err, data) {
+  console.log('pOst-------------------------');
+  if (err) {
+    console.log(' POSTGRES there was an err, ', err);
+  }
+  else {
+    console.log('POSTGRESsuccess, heres data, ', data);
+    db2.selectAll('users',(err, data)=>console.log('userResults: ', data));
+    db2.selectAll('games', (err, data)=>console.log('gamesREsults: ', data));
+  }
+  console.log('pOst-------------------------');
+}
+
+console.log('populating the new DB');
+db2.populateDB(cbdb);
+})
+
+
+
+app.post("/databasePrint", function(req, res) {
+  console.log(
+    "-------------------------------------------------------------");
+  console.log("POST to /databasePrint");
+  console.log(
+    "----------------------------------------------------------------"
+  );
+
+console.log('all info from the new DB');
+db2.selectAll('users',(err, data)=>console.log('user table: ', data.rows));
+db2.selectAll('games', (err, data)=>console.log('games table: ', data.rows));
+})
+
 
 app.listen(PORT, function() {
   console.log(`listening on port ${PORT}!`);
