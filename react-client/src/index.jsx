@@ -199,7 +199,7 @@ class App extends React.Component {
     return (
       <div class="file2" className="container bg-dark">
         <div className="navbar navbar-dark bg-dark ">
-          <h4 className="navbar-brand text-white">Steam Profile Viewer</h4>
+          <h4 className="navbar-brand text-white">Steam Comparator</h4>
           <div>
             <input
               type="text"
