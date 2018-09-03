@@ -170,17 +170,17 @@ class App extends React.Component {
           </div>
         </div>
         <div className="navbar navbar-dark bg-dark ">
-        <h4 className="text-white"> status: {this.state.status} </h4>
+          <h4 className="text-white"> status: {this.state.status} </h4>
         </div>
         <div className="row ">
           <List items={this.state.items} playerInfo={this.state.playerInfo} />
 
           <Games topGames={this.state.topGames} />
         </div>
+        <h4>sample steam names: mitchelconstantin Doogla aerobro</h4>
         <h4>
-          {" "}
-          sample steam ids mitchelconstantin Doogla aerobro 76561198015992404
-          76561198040706268 76561198012307420
+          sample steam ids: 76561198015992404 76561198040706268
+          76561198012307420
         </h4>
       </div>
     );
