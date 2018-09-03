@@ -196,7 +196,7 @@ class App extends React.Component {
   }
 
   render() {
-    return (
+    return ( 
       <div class="file2" className="container bg-dark">
         <div className="navbar navbar-dark bg-dark ">
           <h4 className="navbar-brand text-white">Steam Comparator</h4>
