@@ -206,34 +206,6 @@ console.log('resetting the new DB');
 db2.resetDB(cbdb);
 })
 
-app.post("/databasePop", function(req, res) {
-  console.log(
-    "-------------------------------------------------------------");
-  console.log("POST to /databasePop");
-  console.log(
-    "----------------------------------------------------------------"
-  );
-  // testing progress db
-function cbdb (err, data) {
-  console.log('pOst-------------------------');
-  if (err) {
-    console.log(' POSTGRES there was an err, ', err);
-  }
-  else {
-    console.log('POSTGRESsuccess, heres data, ', data);
-    db2.selectAll('users',(err, data)=>console.log('userResults: ', data));
-    db2.selectAll('games', (err, data)=>console.log('gamesREsults: ', data));
-  }
-  console.log('pOst-------------------------');
-}
-
-console.log('populating the new DB');
-db2.populateDB(cbdb);
-res.send('201');
-})
-
-
-
 app.post("/databasePrint", function(req, res) {
   console.log(
     "-------------------------------------------------------------");

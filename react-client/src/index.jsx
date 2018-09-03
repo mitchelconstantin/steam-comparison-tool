@@ -121,21 +121,6 @@ class App extends React.Component {
     });
   }
 
-  populate() {
-    console.log(" populating the DB!");
-    $.ajax({
-      type: "POST",
-      url: "/databasePop",
-      success: data => {
-        console.log("database has been reset", data);
-      },
-      error: err => {
-        console.log("resetting DB failed");
-        console.log("err", err);
-      }
-    });
-  }
-
   printTables() {
     console.log(" printing the tables!");
     $.ajax({
@@ -193,8 +178,15 @@ class App extends React.Component {
       url: "/profile",
       data: { id: this.state.searchValue },
       success: data => {
-        console.log("calling post top games");
-        this.postTopGames();
+        console.log(" here is the steamid , ", JSON.parse(data).steamid);
+        if (JSON.parse(data).steamid != "Error!") {
+          console.log("calling post top games if not err");
+          this.postTopGames();
+        } else {
+          this.setState({
+            searchValue: ""
+          });
+        }
         this.setState({
           playerInfo: JSON.parse(data)
         });
@@ -234,16 +226,14 @@ class App extends React.Component {
 
           <Games topGames={this.state.topGames} />
         </div>
-        <h4>sample steam names: mitchelconstantin Doogla aerobro</h4>
+        <h5>DEV TOOLS: </h5>
+        <h4>DEMO steam name: mitchelconstantin</h4>
         <h4>
-          sample steam ids: 76561198015992404 76561198040706268
-          76561198012307420
+          DEMO steam ids: [76561198062240812, 76561197991457319,
+          76561198015992404]
         </h4>
         <button className="btn btn-secondary" onClick={this.resetDB}>
           Reset DB!
-        </button>
-        <button className="btn btn-secondary" onClick={this.populate}>
-          populate DB!
         </button>
         <button className="btn btn-secondary" onClick={this.printTables}>
           see all DB!
