@@ -199,7 +199,7 @@ class App extends React.Component {
     return ( 
       <div class="file2" className="container bg-dark">
         <div className="navbar navbar-dark bg-dark ">
-          <h4 className="navbar-brand text-white">Steam Comparator</h4>
+          <h3 className="display-4 text-white ">Steam Comparator</h3>
           <div>
             <input
               type="text"
@@ -217,7 +217,7 @@ class App extends React.Component {
           </div>
         </div>
         <div className="navbar navbar-dark bg-dark ">
-          <h4 className="text-white"> status: {this.state.status} </h4>
+          <h6 className="text-white"> status: {this.state.status} </h6>
         </div>
         <div className="row ">
           <List items={this.state.items} playerInfo={this.state.playerInfo} />
