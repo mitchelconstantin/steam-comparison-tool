@@ -209,10 +209,10 @@ class App extends React.Component {
             {/* <form className="form-inline my-2 my-lg-0" /> */}
 
             <button className="btn btn-primary" onClick={this.getID}>
-              Get ID!
+              Get ID(test)!
             </button>
             <button className="btn btn-secondary" onClick={this.getProfile}>
-              Get Profile!
+              Get Profile(test)!
             </button>
           </div>
         </div>
