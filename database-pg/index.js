@@ -1,26 +1,7 @@
 var pg = require("pg");
 
-var host = "ec2-54-243-31-34.compute-1.amazonaws.com";
-var user = "tpeuvgbdkqgpvd";
-var password = process.env.DBPW;
-var database = "d5nsnjv734jus1";
-var port = "5432";
-// postgres://tpeuvgbdkqgpvd:7a43a6bfe9c7de3cf016ecd508da50eae5b68a301f88f378776030d821ee8f3b@ec2-54-243-31-34.compute-1.amazonaws.com:5432/d5nsnjv734jus1
-// postgres://${user}:${DBPW}@${host}:${port/${database}
+var connection = new pg.Client(process.env.DATABASE_URL + '?ssl=true');
 
-// var conString = `postgres://${user}:${password}@${host}:${port}/${database}&ssl=true`;
-// var conString2 = `postgres://${user}:${DBPW}@${host}:${port`
-// console.log(conString);
-// var connection = new pg.Client(conString);
-
-var connection = new pg.Client({
-  user: user,
-  password: password,
-  database: database,
-  port: port,
-  host: host,
-  ssl: true
-});
 connection.connect();
 
 function queryDatabase(query, params, callback) {
