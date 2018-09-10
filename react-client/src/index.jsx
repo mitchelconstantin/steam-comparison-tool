@@ -199,7 +199,7 @@ class App extends React.Component {
     return ( 
       <div class="file2" className="container bg-dark">
         <div className="navbar navbar-dark bg-dark ">
-          <h3 className="display-4 text-white ">Steam Comparator2</h3>
+          <h3 className="display-4 text-white ">Steam Comparator</h3>
           <div>
             <input
               type="text"
@@ -209,10 +209,10 @@ class App extends React.Component {
             {/* <form className="form-inline my-2 my-lg-0" /> */}
 
             <button className="btn btn-primary" onClick={this.getID}>
-              Get ID(test)!
+              Get ID!
             </button>
             <button className="btn btn-secondary" onClick={this.getProfile}>
-              Get Profile(test)!
+              Get Profile!
             </button>
           </div>
         </div>
@@ -230,7 +230,6 @@ class App extends React.Component {
           DEMO steam ids: [76561198062240812, 76561197991457319,
           76561198015992404]
         </h4>
-        <h4>New field!</h4>
         <button className="btn btn-secondary" onClick={this.resetDB}>
           Reset DB!
         </button>
