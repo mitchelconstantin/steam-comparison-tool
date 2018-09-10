@@ -230,7 +230,7 @@ class App extends React.Component {
           DEMO steam ids: [76561198062240812, 76561197991457319,
           76561198015992404]
         </h4>
-        <hr>New field!</hr>
+        <h4>New field!</h4>
         <button className="btn btn-secondary" onClick={this.resetDB}>
           Reset DB!
         </button>
