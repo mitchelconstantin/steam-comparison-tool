@@ -54,16 +54,17 @@ class App extends React.Component {
 
     try {
       const { data } = await axios(options);
-      console.log('wow this worked');
       this.getTopGames();
       this.setState({
         searchValue: ''
       });
+      
       if (data.length > 0) {
         this.setState({
           topGames: data
         });
       }
+
     } catch (err) {
       console.log(err);
     }
@@ -77,7 +78,6 @@ class App extends React.Component {
 
     try {
       const { data } = await axios(options);
-      console.log('got data back from top games: ', data);
       this.setState({
         searchValue: ''
       });
@@ -125,10 +125,6 @@ class App extends React.Component {
   async getProfile() {
     var nums = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
     var containsText = false;
-    console.log(
-      'looping through searchvalue to look for letters, ',
-      this.state.searchValue
-    );
     var searchTerm = this.state.searchValue;
     for (var i = 0; i < searchTerm.length; i++) {
       if (!nums.includes(searchTerm[i])) {
@@ -142,8 +138,6 @@ class App extends React.Component {
           containsText = true;
         }
       }
-
-      console.log('that is not a profile');
     }
     if (containsText) {
       this.setState({
@@ -164,11 +158,9 @@ class App extends React.Component {
 
     try {
       const { data } = await axios(options);
-      console.log('here is the data ', data);
-      console.log(' here is the steamid , ', data.steamid);
       if (data.steamid != 'Error!') {
-        console.log('calling post top games if not err');
         this.postTopGames();
+
       } else {
         this.setState({
           searchValue: ''
@@ -177,22 +169,18 @@ class App extends React.Component {
       this.setState({
         playerInfo: data
       });
+
     } catch (err) {
       console.log(err);
     }
   }
 
   render() {
-    return (
-      <div class="file2" className="container bg-dark">
+    return <div className="file2" className="container bg-dark">
         <div className="navbar navbar-dark bg-dark ">
           <h3 className="display-4 text-white ">Steam Comparator</h3>
           <div>
-            <input
-              type="text"
-              value={this.state.searchValue}
-              onChange={this.onChange}
-            />
+            <input type="text" value={this.state.searchValue} onChange={this.onChange} />
 
             <button className="btn btn-primary" onClick={this.getID}>
               Get ID!
@@ -210,20 +198,21 @@ class App extends React.Component {
 
           <Games topGames={this.state.topGames} />
         </div>
-        <h5>DEV TOOLS: </h5>
-        <h4>DEMO steam name: mitchelconstantin</h4>
-        <h4>
-          DEMO steam ids: [76561198062240812, 76561197991457319,
-          76561198015992404]
-        </h4>
-        <button className="btn btn-secondary" onClick={this.resetDB}>
-          Reset DB!
-        </button>
-        <button className="btn btn-secondary" onClick={this.printTables}>
-          see all DB!
-        </button>
-      </div>
-    );
+        <div>
+          <h5>DEV TOOLS: </h5>
+          <h4>DEMO steam name: mitchelconstantin</h4>
+          <h4>
+            DEMO steam ids: [76561198062240812, 76561197991457319,
+            76561198015992404]
+          </h4>
+          <button className="btn btn-secondary" onClick={this.resetDB}>
+            Reset DB!
+          </button>
+          <button className="btn btn-secondary" onClick={this.printTables}>
+            see all DB!
+          </button>
+        </div>
+      </div>;
   }
 }
 

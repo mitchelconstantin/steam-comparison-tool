@@ -1,6 +1,4 @@
 import React from "react";
-import ListItem from "./ListItem.jsx";
-
 class Games extends React.Component {
   constructor(props) {
     super(props);
@@ -9,22 +7,19 @@ class Games extends React.Component {
 
   showGamesData() {
     let renderTable = [];
-    // console.log('game length')
-    // console.log(this.props.topGames.length);
+
     if (this.props.topGames.length < 2) {
       renderTable.push(
-      <tr>
+      <tr key={'3'}>
       <td> No games in common </td>
       <td> none </td>
     </tr>)
     } else {
       for (var key in this.props.topGames) {
-        renderTable.push(
-          <tr>
+        renderTable.push(<tr key={this.props.topGames[key].name}>
             <td> {this.props.topGames[key].name} </td>
             <td>{this.props.topGames[key].occurances}</td>
-          </tr>
-        );
+          </tr>);
       }
     }
     return renderTable;
@@ -34,16 +29,20 @@ class Games extends React.Component {
     return (
       <div className="col-sm">
         
-        
         <table className="table table-striped table-dark table-hover">
         <thead>
-        <h4>
-          Games in common:
+          <tr key={'0'}>
+            <td>
+                <h4>
+                  Games in common:
         </h4>
+            </td>
+          </tr>
+
    
           </thead>
           <tbody>
-          <tr>
+          <tr key={'1'}>
             <th> Name of Game </th>
             <th> Number of Occurances </th>
           </tr>

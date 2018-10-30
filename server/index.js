@@ -1,11 +1,8 @@
 var express = require('express');
-var bodyParser = require('body-parser');
 var db2 = require('../database-pg');
 var steam = require('./steam');
 var app = express();
-// const io = require('socket.io')();
-bodyParser.urlencoded({ extended: true });
-app.use(bodyParser.json());
+
 const PORT = process.env.PORT || 3000;
 
 app.use(express.static(__dirname + '/../react-client/dist'));
@@ -27,25 +24,19 @@ app.get('/id', function(req, res) {
 app.post('/games', function(req, res) {
   console.log('-------------------------------------------------------------');
   console.log('POST to /games');
-  console.log(
-    '----------------------------------------------------------------'
-  );
+  console.log('-------------------------------------------------------------');
 
   var sendToDb = function(err, data) {
     if (err) {
       console.log('error', err);
     } else {
-      console.log('got your data inside sendToDb');
       if (data) {
         var parsedData = JSON.parse(data);
 
         if (parsedData.response.games) {
           console.log('got some games to add to db');
-          // console.log(parsedData.response.games)
           console.log('------------------------------------');
           // inserting all of that users games into the DB
-          console.log('here is the first game: ');
-          console.log(parsedData.response.games[0]);
           let dbPromises = parsedData.response.games.map(element => {
             var newPromise = new Promise((resolve, reject) => {
               db2.insertOne(element.appid, element.name, (err, result) => {
@@ -53,14 +44,12 @@ app.post('/games', function(req, res) {
                   console.log('---------------------------------------');
                   console.log('err in promise');
                   console.log(err);
-                  // reject(err);
                 } else {
                   resolve(result);
                 }
               });
             });
             return newPromise;
-            // db.save(element.id, element.name, element.owner.login, element.forks_count, element.open_issues, callback)
           });
           Promise.all(dbPromises)
             .then(() => {
@@ -106,13 +95,9 @@ app.post('/games', function(req, res) {
 });
 
 app.get('/games', function(req, res) {
-  console.log(
-    '----------------------------------------------------------------'
-  );
+  console.log('-------------------------------------------------------------');
   console.log('GET to /games');
-  console.log(
-    '----------------------------------------------------------------'
-  );
+  console.log('-------------------------------------------------------------');
   var sendGamesBack = function(err, data) {
     if (err) {
       console.log('db error');
@@ -129,13 +114,9 @@ app.get('/games', function(req, res) {
 });
 
 app.get('/profile', function(req, res) {
-  console.log(
-    '----------------------------------------------------------------'
-  );
+  console.log('-------------------------------------------------------------');
   console.log('GET to /profile');
-  console.log(
-    '----------------------------------------------------------------'
-  );
+  console.log('-------------------------------------------------------------');
   var sendDataBack = function(err, data) {
     if (err) {
       console.log('server error');
@@ -179,11 +160,8 @@ app.get('/profile', function(req, res) {
 app.post('/database', function(req, res) {
   console.log('-------------------------------------------------------------');
   console.log('POST to /database');
-  console.log('here is the req body', req.body.id);
-  console.log(
-    '----------------------------------------------------------------'
-  );
-  // testing progress db
+  console.log('-------------------------------------------------------------');
+
   function cbdb(err, data) {
     console.log('pOst-------------------------');
     if (err) {
@@ -201,9 +179,8 @@ app.post('/database', function(req, res) {
 app.post('/databasePrint', function(req, res) {
   console.log('-------------------------------------------------------------');
   console.log('POST to /databasePrint');
-  console.log(
-    '----------------------------------------------------------------'
-  );
+  console.log('-------------------------------------------------------------');
+
 
   console.log('all info from the new DB');
   db2.selectAll('users', (err, data) => console.log('user table: ', data.rows));

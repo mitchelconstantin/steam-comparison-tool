@@ -1,5 +1,3 @@
-var express = require("express");
-var bodyParser = require("body-parser");
 var SteamApi = require("steam-api");
 var request = require("request");
 var KEY = process.env.STEAM_API_KEY;

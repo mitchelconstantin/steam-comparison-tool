@@ -31,7 +31,11 @@ class List extends React.Component {
 
         <table className="table table-striped table-dark">
         <tbody>
+          <tr>
+            <td>
         <h4> Player info: </h4>
+              </td>
+            </tr>
           <tr>
             <td> player one </td>
             <td>
