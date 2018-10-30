@@ -27,11 +27,9 @@ app.get('/id', function(req, res) {
 app.post('/games', function(req, res) {
   console.log('-------------------------------------------------------------');
   console.log('POST to /games');
-  console.log('here is the req body', req.body.id);
   console.log(
     '----------------------------------------------------------------'
   );
-  // testing progress db
 
   var sendToDb = function(err, data) {
     if (err) {
@@ -92,17 +90,17 @@ app.post('/games', function(req, res) {
     } else {
       if (data.rowCount < 1) {
         //if user not in DB
-        db2.insertUser(req.body.id, () => console.log('user inserted into DB'));
+        db2.insertUser(req.query.id, () => console.log('user inserted into DB'));
 
         // get list of all his games
-        steam.getPlayerGames(req.body.id, sendToDb);
+        steam.getPlayerGames(req.query.id, sendToDb);
       } else {
         res.send('404');
       }
     }
   };
   console.log('calling checkuser');
-  db2.checkUser(req.body.id, newUserCreation);
+  db2.checkUser(req.query.id, newUserCreation);
   //check that user isn't already in user table before pushing new games
   // if he isn't in the database, put him there
 });
