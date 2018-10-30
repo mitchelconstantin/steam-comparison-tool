@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import $ from "jquery";
+import axios from 'axios';
 import List from "./components/List.jsx";
 import Games from "./components/Games.jsx";
 
@@ -27,24 +28,24 @@ class App extends React.Component {
     });
   }
 
-  getID() {
-    console.log("-----------------");
-    console.log("GETTING ID");
-    console.log("-----------------");
-    $.ajax({
+  //axios
+  async getID() {
+    const options = {
       url: "/id",
-      data: { id: this.state.searchValue },
-      success: data => {
-        this.setState({
-          searchValue: JSON.parse(data)
-        });
-      },
-      error: err => {
-        console.log("err", err);
-      }
-    });
+      params: {id: this.state.searchValue}
+    };
+
+    try {
+      const { data } = await axios(options);
+      console.log(data);
+      this.setState({
+        searchValue: data
+      });
+    } catch (err) {
+      console.log(err);
+    }
   }
-  // this.state.searchValue
+
   postTopGames() {
     console.log("----------------------------");
     console.log(" POST to /games");

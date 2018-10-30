@@ -1,5 +1,4 @@
 var pg = require("pg");
-
 var connection = new pg.Client(process.env.DATABASE_URL + '?ssl=true');
 
 connection.connect();
