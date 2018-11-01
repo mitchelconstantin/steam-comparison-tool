@@ -1,7 +1,9 @@
+require('dotenv').config();
 var express = require('express');
 var db2 = require('../database-pg');
 var steam = require('./steam');
 var app = express();
+
 
 const PORT = process.env.PORT || 3000;
 
